@@ -1,4 +1,5 @@
 import { Card, Tag } from "antd";
+import Image from "next/image";
 
 interface Product {
   name: string;
@@ -15,7 +16,7 @@ export default function ProductCard({ product }: { product: Product }) {
     <Card
       hoverable
       cover={
-        <img
+        <Image
           alt={product.name}
           src={product.image}
           style={{ height: 200, objectFit: "cover" }}

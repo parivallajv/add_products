@@ -7,7 +7,7 @@ import ProductCard from "./components/ProductCard";
 interface Product {
   name: string;
   size: string;
-  color:string;
+  color: string;
   price: number;
   image: string;
   specifications: { key: string; value: string }[];

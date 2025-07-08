@@ -11,10 +11,13 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import Image from "next/image";
+import type { UploadChangeParam } from "antd/es/upload";
 
 interface Product {
   name: string;
-  category: string;
+  size: string;
+  color: string;
   price: number;
   image: string;
   specifications: { key: string; value: string }[];
@@ -31,9 +34,9 @@ export default function CreateProduct({
 
   const [form] = Form.useForm();
 
-  const handleImageUpload = (info: any) => {
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (url: string) => {
+  const handleImageUpload = (info: UploadChangeParam) => {
+    if (info.file.status === "done" && info.file.originFileObj) {
+      getBase64(info.file.originFileObj as File, (url: string) => {
         setImageUrl(url);
         message.success("Image uploaded!");
       });
@@ -48,7 +51,7 @@ export default function CreateProduct({
 
   const handleSpecChange = (index: number, field: string, value: string) => {
     const newSpecs = [...specs];
-    newSpecs[index][field] = value;
+    newSpecs[index][field as "key" | "value"] = value;
     setSpecs(newSpecs);
   };
 
@@ -84,7 +87,7 @@ export default function CreateProduct({
       setSpecs([]);
       setImageUrl(null);
       setIsModalOpen(false);
-    } catch (error) {
+    } catch {
       message.error("Failed to submit product. Please try again.");
     }
   };
@@ -126,14 +129,14 @@ export default function CreateProduct({
             <Upload
               listType="picture-card"
               maxCount={1}
-              customRequest={({ file, onSuccess }) => {
+              customRequest={({ onSuccess }) => {
                 setTimeout(() => onSuccess && onSuccess("ok"), 0);
               }}
               showUploadList={false}
               onChange={handleImageUpload}
             >
               {imageUrl ? (
-                <img src={imageUrl} alt="product" style={{ width: "100%" }} />
+                <Image src={imageUrl} alt="product" style={{ width: "100%" }} />
               ) : (
                 <div>
                   <PlusOutlined />
